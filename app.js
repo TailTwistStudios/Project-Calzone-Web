@@ -24,7 +24,8 @@ app.get("/", function(req,res) {
 });
 
 app.get("/worldmap", function(req,res) {
-    res.json(worldmap.getInstanceWorldmap())
+    //res.json(worldmap.getInstanceWorldmap())
+    res.send(worldmap.getInstanceWorldmap())
 });
 
 //404
