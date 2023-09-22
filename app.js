@@ -2,6 +2,9 @@ let express = require("express");
 let app = express();
 
 
+let worldmap = require("./lib/worldmap")
+
+
 
 let handlebars = require("express-handlebars").create({
     defaultLayout: "main",
@@ -12,9 +15,16 @@ app.set("view engine", "handlebars");
 app.set("port", process.env.PORT || 3000);
 
 
+
+
+
 //homepage
 app.get("/", function(req,res) {
     res.render("home");
+});
+
+app.get("/worldmap", function(req,res) {
+    res.json(worldmap.getInstanceWorldmap())
 });
 
 //404

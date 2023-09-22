@@ -1,0 +1,25 @@
+{
+    "worlds": [
+        {
+            "name":"PurpleTestScene",
+            "connections":[
+                "GreenTestScene",
+                "YellowTestScene"
+            ]
+        },
+        {
+            "name":"GreenTestScene",
+            "connections":[
+                "PurpleTestScene",
+                "YellowTestScene"
+            ]
+        },
+        {
+            "name":"YellowTestScene",
+            "connections":[
+                "GreenTestScene",
+                "PurpleTestScene"
+            ]
+        }
+    ]
+}
