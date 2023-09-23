@@ -3,6 +3,7 @@ let app = express();
 
 
 let worldmap = require("./lib/worldmap")
+let session = require("./lib/session")
 
 
 
@@ -25,7 +26,13 @@ app.get("/", function(req,res) {
 
 app.get("/worldmap", function(req,res) {
     //res.json(worldmap.getInstanceWorldmap())
-    res.send(worldmap.getInstanceWorldmap())
+    res.send(worldmap.getInstanceWorldmap());
+});
+
+
+
+app.get("/sessions", function(req,res) {
+    res.send(session.getSessions());
 });
 
 //404
