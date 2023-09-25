@@ -1,18 +1,22 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
-const session = require("express-session");
-const passport = require("passport");
-const connectEnsureLogin = require("connect-ensure-login");
-
-
 const config = require("./config.json")
+
+//Client helping libraries
 const worldmap = require("./lib/worldmap")
 const calzoneSession = require("./lib/session")
 const users = require("./lib/users");
 
 
+//Web helping libraries
+const bodyParser = require("body-parser");
+const session = require("express-session");
+const passport = require("passport");
+const connectEnsureLogin = require("connect-ensure-login");
+const userModel = require("./lib/models/userModel");
 
+
+//Server setup
 let handlebars = require("express-handlebars").create({
     defaultLayout: "main",
     //helpers: {}
@@ -22,11 +26,26 @@ app.set("view engine", "handlebars");
 app.set("port", process.env.PORT || 3000);
 
 
-//TODO: initialize midleware
-///app.use(session({}))
+
+//midleware setup
+app.use(session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 }
+}));
+
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(userModel.createStrategy());
+passport.serializeUser(userModel.serializeUser());
+passport.deserializeUser(userModel.deserializeUser());
 
 
- 
+
+ //Routes
  
 
 //homepage
@@ -37,11 +56,25 @@ app.get("/", function(req,res) {
     });
 });
 
+
 app.get("/login", function(req,res) {
     res.render("login", {
         siteDomain: config.siteDomain
     });
+});
+app.post("/login", passport.authenticate('local', { failureRedirect: "/"}), function(req,res) {
+    res.redirect("/settings");
 })
+
+app.get("/logout", function(req,res) {
+    req.logOut();
+    res.redirect("/login");
+});
+
+
+app.get("/settings", connectEnsureLogin.ensureLoggedIn(), (req,res) => {
+    req.rend("settings");
+});
 
 app.get("/worldmap", function(req,res) {
     //res.json(worldmap.getInstanceWorldmap())

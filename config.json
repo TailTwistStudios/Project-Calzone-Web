@@ -2,6 +2,8 @@
     "siteName":"Project Calzone Instance",
     "siteDomain": "localhost:3000",
  
+    "sessionSecret": "YouShouldChangeThis",
+
     "port":3000,
     "sessionKeepAliveTime": 60
 }
