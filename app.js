@@ -63,7 +63,10 @@ app.get("/login", function(req,res) {
     });
 });
 app.post("/login", passport.authenticate('local', { failureRedirect: "/"}), function(req,res) {
-    res.redirect("/settings");
+    console.log(req.session);
+    res.render("settings", {
+        user: req.session.passport.user
+    });
 })
 
 app.get("/logout", function(req,res) {
@@ -73,7 +76,7 @@ app.get("/logout", function(req,res) {
 
 
 app.get("/settings", connectEnsureLogin.ensureLoggedIn(), (req,res) => {
-    req.rend("settings");
+    res.render("settings");  
 });
 
 app.get("/worldmap", function(req,res) {
