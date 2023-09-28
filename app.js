@@ -12,9 +12,8 @@ const users = require("./lib/users");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
-const connectEnsureLogin = require("connect-ensure-login");
 const userModel = require("./lib/models/userModel");
-
+const middleware = require("./lib/middleware");
 
 //Server setup
 let handlebars = require("express-handlebars").create({
@@ -24,7 +23,6 @@ let handlebars = require("express-handlebars").create({
 app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 app.set("port", process.env.PORT || 3000);
-
 
 
 //midleware setup
@@ -42,10 +40,6 @@ app.use(passport.session());
 passport.use(userModel.createStrategy());
 passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
-
-
-
- //Routes
  
 
 //homepage
@@ -63,19 +57,15 @@ app.get("/login", function(req,res) {
     });
 });
 app.post("/login", passport.authenticate('local', { failureRedirect: "/"}), function(req,res) {
-    console.log(req.session);
     res.render("settings", {
         user: req.session.passport.user
     });
 })
 
-app.get("/logout", function(req,res) {
-    req.logOut();
-    res.redirect("/login");
-});
+app.get("/logout", middleware.loginRequired, middleware.processLogout);
 
 
-app.get("/settings", connectEnsureLogin.ensureLoggedIn(), (req,res) => {
+app.get("/settings", middleware.loginRequired, (req,res) => {
     res.render("settings");  
 });
 
