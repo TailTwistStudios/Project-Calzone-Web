@@ -1,4 +1,4 @@
-<a href="/login">Login</a> <a href="/logout">Logout</a>
-<p>{{user}}</p>
+{{#if user}}<a href="/logout">Logout</a>{{else}}<a href="/register">Register</a> <a href="/login">Login</a>{{/if}}
+{{#if user}} Welcome {{user}} {{/if}}
 
 {{{body}}}

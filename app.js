@@ -4,7 +4,7 @@ const config = require("./config.json")
 
 //Client helping libraries
 const worldmap = require("./lib/worldmap")
-const calzoneSession = require("./lib/session")
+const calzoneSession = require("./lib/gameSession")
 const users = require("./lib/users");
 
 
@@ -12,7 +12,7 @@ const users = require("./lib/users");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
-const userModel = require("./lib/models/userModel");
+const userModel = require("./lib/mongooseModels/userModel");
 const middleware = require("./lib/middleware");
 
 //Server setup
@@ -20,6 +20,9 @@ let handlebars = require("express-handlebars").create({
     defaultLayout: "main",
     //helpers: {}
 });
+const handlebarsHelpers = require("./lib/handlebarsHelpers") // general library for helpers we need
+handlebarsHelpers.init(handlebars);
+
 app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 app.set("port", process.env.PORT || 3000);
@@ -61,9 +64,10 @@ app.post("/login", passport.authenticate('local', { failureRedirect: "/"}), func
         user: req.session.passport.user
     });
 })
-
 app.get("/logout", middleware.loginRequired, middleware.processLogout);
-
+app.get("/register", middleware.allowRegistration, (req,res) => {
+    res.render("registration");
+});
 
 app.get("/settings", middleware.loginRequired, (req,res) => {
     res.render("settings");  
