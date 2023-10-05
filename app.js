@@ -4,7 +4,7 @@ const config = require("./config.json")
 
 //Client helping libraries
 const worldmap = require("./lib/worldmap")
-const calzoneSession = require("./lib/gameSession")
+const gameSession = require("./lib/gameSession")
 const users = require("./lib/users");
 
 
@@ -79,10 +79,34 @@ app.get("/worldmap", function(req,res) {
 });
 
 
-
+//game sessions
 app.get("/sessions", function(req,res) {
-    res.send(session.getSessions());
+    res.send(gameSession.getSessions());
 });
+app.get("/registersession", function(req,res) {
+    if (req.query) {
+        console.log(req.query)
+
+        let response = gameSession.registerSession({
+            hostusername: req.query.hostusername,
+            hostIP: req.query.hostIP,
+            worldID: req.query.worldID,
+            visibility: req.query.visibility,
+        });
+
+        res.status(202); //created
+        res.json(response);
+        
+    } else {
+
+    }
+
+    res.status(400); //bad request
+    res.send("400");
+});
+
+
+
 
 //404
 app.use(function (req, res) {
