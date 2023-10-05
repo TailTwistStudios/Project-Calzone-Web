@@ -98,11 +98,9 @@ app.get("/registersession", function(req,res) {
         res.json(response);
         
     } else {
-
+        res.status(400); //bad request
+        //res.send("400");
     }
-
-    res.status(400); //bad request
-    res.send("400");
 });
 
 
