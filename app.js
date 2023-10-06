@@ -89,14 +89,17 @@ app.get("/registersession", function(req,res) {
 
         let response = gameSession.registerSession({
             hostusername: req.query.hostusername,
-            hostIP: req.query.hostIP,
+            hostIPv4: req.query.hostIPv4,
             worldID: req.query.worldID,
             visibility: req.query.visibility,
         });
 
-        res.status(202); //created
+        if (response.success) {
+            res.status(202); //created   
+        } else {
+            res.status(400); //bad request
+        }
         res.json(response);
-        
     } else {
         res.status(400); //bad request
         //res.send("400");
