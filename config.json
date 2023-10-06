@@ -7,5 +7,5 @@
     "sessionSecret": "YouShouldChangeThis",
 
     "port":3000,
-    "sessionKeepAliveTime": 60
+    "sessionKeepAliveTimeInSeconds": 60
 }
