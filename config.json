@@ -3,6 +3,7 @@
     "siteDomain": "localhost:3000",
  
     "allowRegistration":true,
+    "debugLogRequests":true,
 
     "sessionSecret": "YouShouldChangeThis",
 

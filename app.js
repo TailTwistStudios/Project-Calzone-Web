@@ -85,7 +85,7 @@ app.get("/sessions", function(req,res) {
 });
 app.get("/registersession", function(req,res) {
     if (req.query) {
-        console.log(req.query)
+        if (config.debugLogRequests) console.log("registersession " + req.query);
 
         let response = gameSession.registerSession({
             hostusername: req.query.hostusername,
@@ -103,6 +103,44 @@ app.get("/registersession", function(req,res) {
     } else {
         res.status(400); //bad request
         //res.send("400");
+    }
+});
+app.get("/checkinsession", function(req,res) {
+    if (req.query) {
+        if (config.debugLogRequests) console.log("checkinsession " + req.query);
+
+        let response = gameSession.checkInSession({
+            sessionID: req.query.sessionID,
+            sessionOwnerKey: req.query.sessionOwnerKey
+        });
+
+        if (response.success) {
+            res.status(200); //created
+        } else {
+            res.status(400); //bad request
+        }
+        res.json(response);
+    }
+    else {
+        res.status(400); // bad request
+    }
+});
+app.get("/closesession", function(req,res) {
+    if (req.query) {
+        let response = gameSession.closeSession({
+            sessionID: req.query.sessionID,
+            sessionOwnerKey: req.query.sessionOwnerKey,
+        });
+
+        if (response.success) {
+            res.status(200); //created
+        } else {
+            res.status(400); //bad request
+        }
+        res.json(response);
+    }
+    else {
+        res.status(400); //bad request
     }
 });
 
