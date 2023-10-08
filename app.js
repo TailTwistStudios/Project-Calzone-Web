@@ -64,8 +64,8 @@ app.post("/login", passport.authenticate('local', { failureRedirect: "/"}), func
         user: req.session.passport.user
     });
 })
-app.get("/logout", middleware.loginRequired, middleware.processLogout);
-app.get("/register", middleware.allowRegistration, (req,res) => {
+app.post("/logout", middleware.loginRequired, middleware.processLogout);
+app.post("/register", middleware.allowRegistration, (req,res) => {
     res.render("registration");
 });
 
@@ -83,7 +83,7 @@ app.get("/worldmap", function(req,res) {
 app.get("/sessions", function(req,res) {
     res.send(gameSession.getSessions());
 });
-app.get("/registersession", function(req,res) {
+app.post("/registersession", function(req,res) {
     if (req.query) {
         if (config.debugLogRequests) console.log("registersession " + req.query);
 
@@ -105,7 +105,7 @@ app.get("/registersession", function(req,res) {
         //res.send("400");
     }
 });
-app.get("/checkinsession", function(req,res) {
+app.post("/checkinsession", function(req,res) {
     if (req.query) {
         if (config.debugLogRequests) console.log("checkinsession " + req.query);
 
@@ -125,7 +125,7 @@ app.get("/checkinsession", function(req,res) {
         res.status(400); // bad request
     }
 });
-app.get("/closesession", function(req,res) {
+app.post("/closesession", function(req,res) {
     if (req.query) {
         let response = gameSession.closeSession({
             sessionID: req.query.sessionID,
