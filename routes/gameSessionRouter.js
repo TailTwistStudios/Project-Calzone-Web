@@ -8,15 +8,14 @@ router.get("/sessions", function(req,res) {
     res.send(gameSession.getSessions());
 });
 router.post("/registersession", function(req,res) {
-    console.log(req)
-    if (req.query) {
+    if (req.body) {
         if (config.debugLogRequests) console.log("registersession " + req.query);
 
         let response = gameSession.registerSession({
-            hostusername: req.query.hostusername,
-            hostIPv4: req.query.hostIPv4,
-            worldID: req.query.worldID,
-            visibility: req.query.visibility,
+            hostusername: req.body.hostusername,
+            hostIPv4: req.body.hostIPv4,
+            worldID: req.body.worldID,
+            visibility: req.body.visibility,
         });
 
         if (response.success) {
@@ -27,17 +26,16 @@ router.post("/registersession", function(req,res) {
         res.json(response);
     } else {
         res.status(400); //bad request
-        //res.send("400");
+        //res.send~("400");
     }
 });
 router.post("/checkinsession", function(req,res) {
-    console.log(req.body)
-    if (req.query) {
+    if (req.body) {
         if (config.debugLogRequests) console.log("checkinsession " + req.query);
 
         let response = gameSession.checkInSession({
-            sessionID: req.query.sessionID,
-            sessionOwnerKey: req.query.sessionOwnerKey
+            sessionID: req.body.sessionID,
+            sessionOwnerKey: req.body.sessionOwnerKey
         });
 
         if (response.success) {
@@ -52,10 +50,10 @@ router.post("/checkinsession", function(req,res) {
     }
 });
 router.post("/closesession", function(req,res) {
-    if (req.query) {
+    if (req.body) {
         let response = gameSession.closeSession({
-            sessionID: req.query.sessionID,
-            sessionOwnerKey: req.query.sessionOwnerKey,
+            sessionID: req.body.sessionID,
+            sessionOwnerKey: req.body.sessionOwnerKey,
         });
 
         if (response.success) {

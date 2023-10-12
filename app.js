@@ -3,7 +3,6 @@ const app = express();
 const config = require("./config.json")
 
 //Client helping libraries
-const worldmap = require("./lib/worldmap")
 const gameSession = require("./lib/gameSession")
 const users = require("./lib/users");
 
@@ -74,15 +73,12 @@ app.get("/settings", middleware.loginRequired, (req,res) => {
     res.render("settings");  
 });
 
-app.get("/worldmap", function(req,res) {
-    //res.json(worldmap.getInstanceWorldmap())
-    res.send(worldmap.getInstanceWorldmap());
-});
 
 
 // Game Sessions
 const gameSessionRouter = require('./routes/gameSessionRouter');
 app.use("/",gameSessionRouter.router);
+
 
 //404
 app.use(function (req, res) {
