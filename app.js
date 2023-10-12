@@ -36,7 +36,8 @@ app.use(session({
     cookie: { maxAge: 60 * 60 * 1000 }
 }));
 
-app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -84,6 +85,7 @@ app.get("/sessions", function(req,res) {
     res.send(gameSession.getSessions());
 });
 app.post("/registersession", function(req,res) {
+    console.log(req)
     if (req.query) {
         if (config.debugLogRequests) console.log("registersession " + req.query);
 
@@ -106,6 +108,7 @@ app.post("/registersession", function(req,res) {
     }
 });
 app.post("/checkinsession", function(req,res) {
+    console.log(req.body)
     if (req.query) {
         if (config.debugLogRequests) console.log("checkinsession " + req.query);
 
