@@ -3,8 +3,6 @@ const app = express();
 const config = require("./config.json")
 
 //Client helping libraries
-const gameSession = require("./lib/gameSession")
-const users = require("./lib/users");
 
 
 //Web helping libraries
