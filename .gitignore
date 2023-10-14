@@ -51,3 +51,6 @@ $RECYCLE.BIN/
 
 # VS Code history plugin
 .history
+
+# Local Object Storage
+object_storage/
