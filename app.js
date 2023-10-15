@@ -9,10 +9,7 @@ const config = require("./config.json")
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
-const userModel = require("./lib/mongooseModels/userModel");
 const middleware = require("./lib/middleware");
-
-//Server setup
 let handlebars = require("express-handlebars").create({
     defaultLayout: "main",
     //helpers: {}
@@ -38,10 +35,12 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(userModel.createStrategy());
-passport.serializeUser(userModel.serializeUser());
-passport.deserializeUser(userModel.deserializeUser());
- 
+const users = require("./lib/users");
+
+//passport.use(userModel.createStrategy());
+//passport.serializeUser(userModel.serializeUser());
+//passport.deserializeUser(userModel.deserializeUser());
+
 
 //homepage
 app.get("/", function(req,res) {
