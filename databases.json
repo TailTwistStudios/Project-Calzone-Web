@@ -1,0 +1,10 @@
+[
+    {
+        "databaseName":"UserAccounts",
+        "databaseDirectory":"./private/UserAccounts"
+    },
+    {
+        "databaseName":"UserProfiles",
+        "databaseDirectory":"./private/UserProfiles"
+    }
+]
