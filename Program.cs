@@ -1,11 +1,12 @@
 
 using Project_Calzone_Web.lib;
-
+using Project_Calzone_Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<GameSessionService>();
 
 var app = builder.Build();
 

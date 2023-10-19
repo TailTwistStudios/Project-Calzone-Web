@@ -2,42 +2,38 @@
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Project_Calzone_Web.lib;
+using Project_Calzone_Web.lib.GameSessions;
+using Project_Calzone_Web.Lib.GameSessions;
 
-namespace Project_Calzone_Web.lib.GameSessions
+namespace Project_Calzone_Web.Services
 {
-    public static class GameSessionManager
+    public class GameSessionService
     {
         static private Random rnd = new Random();
         static private List<GameSession> sessions = new List<GameSession>();
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
-        public enum sessionVisibility { PUBLIC, PRIVATE };
 
-        public static void registerSession(string hostusername, string hostIPv4, string worldID, sessionVisibility visibility = sessionVisibility.PUBLIC)
+        public GameSessionService(IWebHostEnvironment webHostEnvironment)
+        {
+            WebHostEnvironment = webHostEnvironment;
+        }
+
+
+        public static SessionRegistrationReceipt registerSession(string hostusername, string hostIPv4, string worldID, GameSession.sessionVisibility visibility = GameSession.sessionVisibility.PUBLIC)
         {
             //verify the data input
             Regex r = new Regex(RegexLibrary.IPv4);
             if (r.IsMatch(hostIPv4))
             {
                 Debug.Print("IP address \"" + hostIPv4 + "\" does not match the regex");
-                return;
+                return null;
             }
 
+            GameSession session = new GameSession(hostusername,hostIPv4,worldID,visibility);
 
-            GameSession session = new GameSession();
-
-            session.lastCheckin = Time.now;
-            session.timeCreated = Time.now;
-
-            session.sessionID = generateNewSessionID();
-            session.sessionOwnerKey = generateNewSessionOwnerKey();
-
-
-            Debug.Print("Storing the value of the new session has not been setup yet.");
-
-
-            /*return {
-                
-            };*/
+            return new SessionRegistrationReceipt(session);
         }
 
         public static bool checkInSession(string sessionID, string sessionOwnerKey)
@@ -47,7 +43,7 @@ namespace Project_Calzone_Web.lib.GameSessions
             if (targetSession == null) return false; // no entry 
             if (targetSession.sessionOwnerKey != sessionOwnerKey) return false; //invalid session owner key
 
-            targetSession.lastCheckin = Date.now();
+            targetSession.lastCheckin = Time.now;
 
             return true;
         }
@@ -66,24 +62,18 @@ namespace Project_Calzone_Web.lib.GameSessions
         }
 
 
-        public static GameSession[] getSessions()
+        public static SanitizedGameSession[] getSessions()
         {
             purgeOldSessions();
-            let sanitizedSessions = sessions.map((session) =>
-            {
-                return {
-                hostusername: session.hostusername,
-            sessionID: session.sessionID,
-            worldID: session.worldID,
-            visbility: session.visbility,
-            timeCreated: session.timeCreated,
-            //lastCheckin: session.lastCheckin
-        }
-            });
 
-            return sanitizedSessions;
-        }
+            List<SanitizedGameSession> sanitizedSessions = SanitizedGameSession.sanitizeMultiple(sessions);
 
+            return sanitizedSessions.ToArray();
+        }
+        public static int getSessionCount()
+        {
+            return getSessions().Length;
+        }
 
 
         //Session management helper functions
@@ -110,7 +100,6 @@ namespace Project_Calzone_Web.lib.GameSessions
         {
             return getSessionByID != null;
         }
-
 
 
         public static string generateNewSessionID()
