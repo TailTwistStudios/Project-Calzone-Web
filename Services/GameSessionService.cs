@@ -32,6 +32,7 @@ namespace Project_Calzone_Web.Services
             }
 
             GameSession session = new GameSession(hostusername,hostIPv4,worldID,visibility);
+            sessions.Add(session);
 
             return new SessionRegistrationReceipt(session);
         }
@@ -62,7 +63,7 @@ namespace Project_Calzone_Web.Services
         }
 
 
-        public static SanitizedGameSession[] getSessions()
+        public IEnumerable<SanitizedGameSession> getSessions()
         {
             purgeOldSessions();
 
@@ -70,9 +71,9 @@ namespace Project_Calzone_Web.Services
 
             return sanitizedSessions.ToArray();
         }
-        public static int getSessionCount()
+        public int getSessionCount()
         {
-            return getSessions().Length;
+            return getSessions().Count();
         }
 
 
