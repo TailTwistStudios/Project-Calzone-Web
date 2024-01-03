@@ -8,7 +8,7 @@ const config = require("./config.json")
 //Web helping libraries
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const passport = require("passport");
+//const passport = require("passport");
 const middleware = require("./lib/middleware");
 let handlebars = require("express-handlebars").create({
     defaultLayout: "main",
@@ -32,8 +32,8 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.initialize());
+//app.use(passport.session());
 
 const users = require("./lib/users");
 
